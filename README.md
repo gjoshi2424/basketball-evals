@@ -20,7 +20,7 @@ I was also surprised that 3.2 preformed worse than 3.2:1b for the zero-shot eval
 
 Potential issues with data:
 
--The data was created synthetically using gemini, so there can be inaccuracies in the discriptions I may have missed
+-The data was created synthetically using gemini, so there can be inaccuracies in the descriptions I may have missed
 
 -Data only includes 50 questions which is relatively small
 
