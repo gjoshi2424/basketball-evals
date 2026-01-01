@@ -2,6 +2,7 @@ from inspect_ai import Task, task
 from inspect_ai.dataset import json_dataset, Sample
 from inspect_ai.solver import multiple_choice, system_message
 from inspect_ai.scorer import choice
+from inspect_ai.model import GenerateConfig
 
 SYSTEM_MESSAGE = """
 Choose the correct basketball scheme or play based on the description given.
@@ -40,4 +41,5 @@ def basketball_mcq_eval(fewshot=True):
         dataset=json_dataset("../data/plays.jsonl", sample_fields=record_to_sample),
         solver=solver,
         scorer=choice(),
+        config=GenerateConfig(temperature=0.0)
     )
