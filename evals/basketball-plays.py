@@ -16,7 +16,7 @@ def record_to_sample(record):
 
 @task
 def basketball_mcq_eval():
-    dataset=json_dataset("plays.jsonl", sample_fields=record_to_sample)
+    dataset=json_dataset("../data/plays.jsonl", sample_fields=record_to_sample)
     return Task(
         dataset=dataset,
         solver=[
