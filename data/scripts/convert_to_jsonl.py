@@ -6,6 +6,6 @@ df = pd.read_csv('data/player-season-stats.csv')
 print(f"Converting {len(df)} rows to JSONL format...")
 
 # Convert to JSONL (each row is a JSON object on a separate line)
-df.to_json('data/player-season-stats.jsonl', orient='records', lines=True)
+df.to_json('./player-season-stats.jsonl', orient='records', lines=True)
 
 print(f"Successfully saved to data/player-season-stats.jsonl")

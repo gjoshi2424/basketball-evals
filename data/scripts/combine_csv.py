@@ -1,8 +1,8 @@
 import pandas as pd
 
 # Read both CSV files
-player_totals = pd.read_csv('data/player-totals.csv')
-players_advanced = pd.read_csv('data/players-advanced.csv')
+player_totals = pd.read_csv('./player-totals.csv')
+players_advanced = pd.read_csv('./players-advanced.csv')
 
 print(f"Player totals shape: {player_totals.shape}")
 print(f"Players advanced shape: {players_advanced.shape}")
@@ -28,5 +28,5 @@ print(f"\nCombined shape: {combined.shape}")
 print(f"Combined columns: {list(combined.columns)}")
 
 # Save the combined dataframe
-combined.to_csv('data/player-season-stats.csv', index=False)
+combined.to_csv('./player-season-stats.csv', index=False)
 print("\nSuccessfully saved to data/player-season-stats.csv")
