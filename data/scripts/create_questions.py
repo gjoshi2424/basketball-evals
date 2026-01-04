@@ -78,24 +78,6 @@ for _, row in ftr_rows.iterrows():
     }
     all_questions.append(question)
 
-# Win Shares per 48 (WS/48) - rows 125-149
-ws48_rows = df.iloc[125:150]
-for _, row in ws48_rows.iterrows():
-    player = row['Player']
-    ws = round(row['WS'], 1)
-    mp = int(row['MP'])
-    ws48 = round(row['WS/48'], 3)
-    
-    ws_per_minute = ws / mp
-    reasoning = f"WS/48 = (WS / MP) * 48 = ({ws} / {mp}) * 48 = {round(ws_per_minute, 6)} * 48 = {ws48}"
-    
-    question = {
-        "input": f"{player} has {ws} win shares over {mp} minutes played. What is his win shares per 48 minutes (WS/48) as a decimal? Round to the nearest 3 decimal places.",
-        "target": ws48,
-        "reasoning": reasoning
-    }
-    all_questions.append(question)
-
 # Save all questions to JSONL file
 with open('../player-season-stats-questions.jsonl', 'w') as f:
     for question in all_questions:
