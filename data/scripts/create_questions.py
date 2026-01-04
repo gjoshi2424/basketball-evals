@@ -1,14 +1,20 @@
 import pandas as pd
 import json
+import os
+
+# Get the directory of this script
+script_dir = os.path.dirname(os.path.abspath(__file__))
+data_dir = os.path.dirname(script_dir)
 
 # Read the JSONL file
-df = pd.read_json('../player-season-stats.jsonl', lines=True)
+df = pd.read_json(os.path.join(data_dir, 'player-season-stats.jsonl'), lines=True)
 
 all_questions = []
+few_shot = []
 
-# Effective Field Goal % (eFG%) - rows 25-49
-efg_rows = df.iloc[25:50]
-for _, row in efg_rows.iterrows():
+# Effective Field Goal % (eFG%) - row 0 (few-shot) + row 0 (few-shot) + rows 25-49
+efg_rows = list(df.iloc[[0]].iterrows()) + list(df.iloc[25:50].iterrows())
+for idx, (_, row) in enumerate(efg_rows):
     player = row['Player']
     fg = int(row['FG'])
     three_p = int(row['3P'])
@@ -22,11 +28,14 @@ for _, row in efg_rows.iterrows():
         "target": efg,
         "reasoning": reasoning
     }
-    all_questions.append(question)
+    if idx == 0:
+        few_shot.append(question)
+    else:
+        all_questions.append(question)
 
-# True Shooting % (TS%) - rows 50-74
-ts_rows = df.iloc[50:75]
-for _, row in ts_rows.iterrows():
+# True Shooting % (TS%) - row 1 (few-shot) + row 1 (few-shot) + rows 50-74
+ts_rows = list(df.iloc[[1]].iterrows()) + list(df.iloc[50:75].iterrows())
+for idx, (_, row) in enumerate(ts_rows):
     player = row['Player']
     pts = int(row['PTS'])
     fga = int(row['FGA'])
@@ -42,11 +51,14 @@ for _, row in ts_rows.iterrows():
         "target": ts,
         "reasoning": reasoning
     }
-    all_questions.append(question)
+    if idx == 0:
+        few_shot.append(question)
+    else:
+        all_questions.append(question)
 
-# 3-Point Attempt Rate (3PAr) - rows 75-99
-three_par_rows = df.iloc[75:100]
-for _, row in three_par_rows.iterrows():
+# 3-Point Attempt Rate (3PAr) - row 2 (few-shot) + row 2 (few-shot) + rows 75-99
+three_par_rows = list(df.iloc[[2]].iterrows()) + list(df.iloc[75:100].iterrows())
+for idx, (_, row) in enumerate(three_par_rows):
     player = row['Player']
     three_pa = int(row['3PA'])
     fga = int(row['FGA'])
@@ -59,11 +71,14 @@ for _, row in three_par_rows.iterrows():
         "target": three_par,
         "reasoning": reasoning
     }
-    all_questions.append(question)
+    if idx == 0:
+        few_shot.append(question)
+    else:
+        all_questions.append(question)
 
-# Free Throw Rate (FTr) - rows 100-124
-ftr_rows = df.iloc[100:125]
-for _, row in ftr_rows.iterrows():
+# Free Throw Rate (FTr) - row 3 (few-shot) + row 3 (few-shot) + rows 100-124
+ftr_rows = list(df.iloc[[3]].iterrows()) + list(df.iloc[100:125].iterrows())
+for idx, (_, row) in enumerate(ftr_rows):
     player = row['Player']
     fta = int(row['FTA'])
     fga = int(row['FGA'])
@@ -76,11 +91,20 @@ for _, row in ftr_rows.iterrows():
         "target": ftr,
         "reasoning": reasoning
     }
-    all_questions.append(question)
+    if idx == 0:
+        few_shot.append(question)
+    else:
+        all_questions.append(question)
 
 # Save all questions to JSONL file
-with open('../player-season-stats-questions.jsonl', 'w') as f:
+with open(os.path.join(data_dir, 'player-season-stats-questions.jsonl'), 'w') as f:
     for question in all_questions:
         f.write(json.dumps(question) + '\n')
 
+# Save few-shot examples to JSONL file
+with open(os.path.join(data_dir, 'player-season-stats-fewshot.jsonl'), 'w') as f:
+    for question in few_shot:
+        f.write(json.dumps(question) + '\n')
+
 print(f"Successfully created {len(all_questions)} questions")
+print(f"Successfully created {len(few_shot)} few-shot examples")

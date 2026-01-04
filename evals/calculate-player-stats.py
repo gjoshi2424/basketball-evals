@@ -1,13 +1,26 @@
 from inspect_ai import Task, task
 from inspect_ai.dataset import json_dataset, Sample
-from inspect_ai.solver import prompt_template, generate, use_tools
+from inspect_ai.solver import prompt_template, generate, use_tools, system_message
 from inspect_ai.scorer import match
 from inspect_ai.model import GenerateConfig
 from inspect_ai.tool import tool
 
 
-PROMPT_TEMPLATE = """
-Solve the following basketball stats problem step by step. You can use the given tools and trust the result from them. The last line of your
+PROMPT_TEMPLATE_WITH_TOOLS = """
+Solve the following basketball stats problem using the given tools. You can trust the result from them. The last line of your
+response should be of the form "ANSWER: $ANSWER" (without quotes) 
+where $ANSWER is the answer to the problem.
+
+{prompt}
+
+Remember to put your answer on its own line at the end in the form
+"ANSWER: $ANSWER" (without quotes) where $ANSWER is the answer to 
+the problem, and you do not need to use a \\boxed command.
+
+""".strip()
+
+PROMPT_TEMPLATE_WITHOUT_TOOLS = """
+Solve the following basketball stats problem step by step. The last line of your
 response should be of the form "ANSWER: $ANSWER" (without quotes) 
 where $ANSWER is the answer to the problem.
 
@@ -23,12 +36,19 @@ Reasoning:
 def record_to_sample(record):
     question = record["input"]
     answer = str(record['target'])
-    metadata = {"reason": record['reasoning']}
+    metadata = {"reasoning": record['reasoning']}
 
     return Sample(
         input=question,
         target=answer,
         metadata=metadata
+    )
+
+def sample_to_fewshot(sample):
+    return (
+        f"{sample.input}\n\Reasoning:\n"
+        + f"{sample.metadata['reasoning']}\n\n"
+        + f"ANSWER: {sample.target}"
     )
 
 @tool
@@ -106,9 +126,19 @@ def free_throw_rate():
 
 
 @task
-def basketball_stats():
-    solver = [prompt_template(PROMPT_TEMPLATE), use_tools(efg(), true_shooting(), three_point_attempt_rate(), free_throw_rate()), generate()]
-    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample)
+def basketball_stats(pass_tools = False, few_shot = False):
+    solver = [generate()]
+    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=20, limit=5)
+
+    if(pass_tools):
+        solver.insert(0, prompt_template(PROMPT_TEMPLATE_WITH_TOOLS))
+        solver.insert(1, use_tools(efg(), true_shooting(), three_point_attempt_rate(), free_throw_rate()))
+    else:
+        solver.insert(0, prompt_template(PROMPT_TEMPLATE_WITHOUT_TOOLS))
+    if(few_shot):
+        fewshot_data = json_dataset("../data/player-season-stats-fewshot.jsonl", sample_fields=record_to_sample, shuffle=True)
+        sys_message = "\n\n".join([sample_to_fewshot(sample) for sample in fewshot_data])
+        solver.insert(0, system_message(sys_message))
     return Task(
         dataset=dataset,
         solver=solver,
