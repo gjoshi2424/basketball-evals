@@ -3,7 +3,7 @@ Learning inspect by creating simple evals related to basketball
 
 ## Results
 
-### plays.jsonl
+### Basketball Plays Questions
 
 | Model | Setting | Accuracy | Std Error |
 |-------|---------|----------|-----------|
@@ -25,3 +25,16 @@ Potential issues with data:
 -Data only includes 50 questions which is relatively small
 
 -Some basketball schemes and plays have multiple names
+
+### Player Stats Questions
+
+| Model | Setting | Tools | Accuracy | Std Error |
+|-------|---------|-------|----------|-----------|
+| llama3.2 | Zero-shot | No | 0.080 | 0.055 |
+| llama3.2 | Few-shot | No | 0.240 | 0.087 |
+| llama3.2 | Zero-shot | Yes | 1.000 | 0.000 |
+| llama3.2 | Few-shot | Yes | 1.000 | 0.000 |
+| llama3.2:1b | Zero-shot | No | 0.040 | 0.040 |
+| llama3.2:1b | Few-shot | No | 0.040 | 0.040 |
+| llama3.2:1b | Zero-shot | Yes | 0.040 | 0.040 |
+| llama3.2:1b | Few-shot | Yes | 0.040 | 0.040 |

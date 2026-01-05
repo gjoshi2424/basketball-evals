@@ -128,7 +128,7 @@ def free_throw_rate():
 @task
 def basketball_stats(pass_tools = False, few_shot = False):
     solver = [generate()]
-    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=20, limit=5)
+    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=25, limit=25)
 
     if(pass_tools):
         solver.insert(0, prompt_template(PROMPT_TEMPLATE_WITH_TOOLS))
@@ -136,13 +136,13 @@ def basketball_stats(pass_tools = False, few_shot = False):
     else:
         solver.insert(0, prompt_template(PROMPT_TEMPLATE_WITHOUT_TOOLS))
     if(few_shot):
-        fewshot_data = json_dataset("../data/player-season-stats-fewshot.jsonl", sample_fields=record_to_sample, shuffle=True)
+        fewshot_data = json_dataset("../data/player-season-stats-fewshot.jsonl", sample_fields=record_to_sample)
         sys_message = "\n\n".join([sample_to_fewshot(sample) for sample in fewshot_data])
         solver.insert(0, system_message(sys_message))
     return Task(
         dataset=dataset,
         solver=solver,
         scorer=match(numeric=True),
-        config=GenerateConfig(temperature=0.0)
+        config=GenerateConfig(temperature=0.0, timeout=60)
     )
    
