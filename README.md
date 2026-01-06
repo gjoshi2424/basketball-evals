@@ -82,10 +82,10 @@ inspect eval evals/identify-play.py@basketball_plays --model ollama/llama3.2:1b 
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T few_shot=true
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T pass_tools=true
-inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T few_shot=true -T pass_tools=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T few_shot=true pass_tools=true
 
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T few_shot=true
 inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T pass_tools=true
-inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T few_shot=true -T pass_tools=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T few_shot=true pass_tools=true
 ```
