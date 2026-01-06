@@ -34,6 +34,14 @@ Reasoning:
 """.strip()
 
 def record_to_sample(record):
+    """Convert to Inspect Sample.
+    
+    Args:
+        record: Contains input question, target answer, and reasoning.
+        
+    Returns:
+        Sample object with input, target, and reasoning stored in metadata.
+    """
     question = record["input"]
     answer = str(record['target'])
     metadata = {"reasoning": record['reasoning']}
@@ -45,6 +53,14 @@ def record_to_sample(record):
     )
 
 def sample_to_fewshot(sample):
+    """Format a sample as a few-shot example with reasoning.
+    
+    Args:
+        sample: Sample object with input, target, and reasoning metadata.
+        
+    Returns:
+        Formatted string showing the question, step-by-step reasoning, and answer.
+    """
     return (
         f"{sample.input}\n\Reasoning:\n"
         + f"{sample.metadata['reasoning']}\n\n"
@@ -127,6 +143,18 @@ def free_throw_rate():
 
 @task
 def basketball_stats(pass_tools = False, few_shot = False):
+    """
+    Tests mathematical reasoning by asking models to compute stats
+    from player data.
+    
+    Args:
+        pass_tools: If True, provides calculator tools for each stat formula.
+        few_shot: If True, includes few-shot examples with reasoning.
+        
+    Returns:
+        Task configured with dataset, solver chain, and numeric matcher scorer.
+        
+    """
     solver = [generate()]
     dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=25, limit=25)
 
