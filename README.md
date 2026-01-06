@@ -58,3 +58,34 @@ Potential Issues:
 -25 questions is a very small sample size
 
 -Without explicit formulas formatting of the questions may be confusing or harder to understand
+
+
+## Running the Evals
+
+### Setup
+```bash
+pip install inspect-ai
+ollama pull llama3.2
+ollama pull llama3.2:1b
+```
+
+### Run All Evaluations
+```bash
+# Basketball Plays
+inspect eval evals/identify-play.py@basketball_plays --model ollama/llama3.2
+inspect eval evals/identify-play.py@basketball_plays  --model ollama/llama3.2:1b -T few_shot=true
+
+inspect eval evals/identify-play.py@basketball_plays --model ollama/llama3.2:1b
+inspect eval evals/identify-play.py@basketball_plays --model ollama/llama3.2:1b -T few_shot=true
+
+# Player Stats
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T few_shot=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T pass_tools=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2 -T few_shot=true -T pass_tools=true
+
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T few_shot=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T pass_tools=true
+inspect eval evals/calculate-player-stats.py@basketball_stats --model ollama/llama3.2:1b -T few_shot=true -T pass_tools=true
+```

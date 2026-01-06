@@ -142,7 +142,7 @@ def free_throw_rate():
 
 
 @task
-def basketball_stats(pass_tools = False, few_shot = False):
+def basketball_stats(pass_tools = False, few_shot = False, limit=25):
     """
     Tests mathematical reasoning by asking models to compute stats
     from player data.
@@ -156,7 +156,7 @@ def basketball_stats(pass_tools = False, few_shot = False):
         
     """
     solver = [generate()]
-    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=25, limit=25)
+    dataset = json_dataset("../data/player-season-stats-questions.jsonl", sample_fields=record_to_sample, shuffle=True, seed=25, limit=limit)
 
     if(pass_tools):
         solver.insert(0, prompt_template(PROMPT_TEMPLATE_WITH_TOOLS))
