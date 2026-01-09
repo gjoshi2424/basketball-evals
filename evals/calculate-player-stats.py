@@ -171,6 +171,6 @@ def basketball_stats(pass_tools = False, few_shot = False, limit=25):
         dataset=dataset,
         solver=solver,
         scorer=match(numeric=True),
-        config=GenerateConfig(temperature=0.0, timeout=60)
+        config=GenerateConfig(temperature=0.0)
     )
    
